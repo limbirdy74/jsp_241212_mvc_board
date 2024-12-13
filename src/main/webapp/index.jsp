@@ -9,6 +9,6 @@
 <body>
 	<h1>매인 화면</h1>
 	<hr>
-
+	<a href="list.do">모든 게시판 글 보기</a>
 </body>
 </html>
