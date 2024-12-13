@@ -109,7 +109,11 @@ public class BoardDao {  // DB 접속용 class  data access object
 		}
 	}
 	
-	public BoardDto content_view(String cbnum) {  // 게시판 글 목록에서 클릭한 글 내용 보기
+	public BoardDto content_view(String cbnum, String modifyFlag) {  // 게시판 글 목록에서 클릭한 글 내용 보기
+		
+		if (modifyFlag.equals("0")) {
+			up_hit(cbnum); //조회수 중가 메소드 호출
+		}
 		
 		String sql = "SELECT * FROM mvc_board WHERE bnum = ?";  // 클릭한 글 번호로 글 내용 가져오기
 		
@@ -172,4 +176,120 @@ public class BoardDao {  // DB 접속용 class  data access object
 		return bDto;  // 클릭한 글 번호를 인수로 넣어서 호출하면 그 글의 내용이 담긴 DTO를 반환
 	}
 
+	public void board_delete(String cbnum) {  // 게시판 글 삭제
+		
+		String sql = "DELETE FROM mvc_board WHERE bnum = ?";  // 글 번호로 삭제하기
+		
+		String driverName = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/jsp_project";
+		String username = "root";
+		String password = "12345";
+		
+		Connection conn= null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, cbnum);
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void board_modify(String bnum, String btitle, String bname, String bcontent) {  // 게시판 글 수정
+		
+		String sql = "UPDATE mvc_board SET btitle = ?, bname = ?, bcontent = ? WHERE bnum = ?";  // 글 번호로 삭제하기
+		
+		String driverName = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/jsp_project";
+		String username = "root";
+		String password = "12345";
+		
+		Connection conn= null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,  btitle);
+			pstmt.setString(2,  bname);
+			pstmt.setString(3,  bcontent);
+			pstmt.setString(4,  bnum);
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void up_hit(String bnum) {  // 조회수 증가
+		
+		String sql = "UPDATE mvc_board SET bhit = bhit + 1 WHERE bnum = ?";  // 글 번호로 삭제하기
+		
+		String driverName = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost:3306/jsp_project";
+		String username = "root";
+		String password = "12345";
+		
+		Connection conn= null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, username, password);
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, bnum);
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

@@ -16,7 +16,7 @@
 		</tr>
 		<tr>
 			<th>조회수</th>
-			<td>${boardDto.bnum}</td>
+			<td>${boardDto.bhit}</td>
 		</tr>
 		<tr>
 			<th>작성자</th>
@@ -29,6 +29,13 @@
 		<tr>
 			<th>등록일</th>
 			<td>${boardDto.bdate}</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="right">
+				<input type="button" value="글수정" onclick="location.href='modify_form.do?bnum=${boardDto.bnum}'">
+				<input type="button" value="글삭제" onclick="location.href='delete.do?bnum=${boardDto.bnum}'">
+				<input type="button" value="글목록" onclick="location.href='list.do'">
+			</td>
 		</tr>
 	</table>
 </body>

@@ -121,11 +121,37 @@ public class BoardController extends HttpServlet {  // controller 는 상속받�
 			String bnum = request.getParameter("bnum"); //유저가 글내용 보기를 원하는 클릭한 글의 번호
 			
 			BoardDao boardDao = new BoardDao();
-			BoardDto bDto = boardDao.content_view(bnum);
-			
+			BoardDto bDto = boardDao.content_view(bnum, "0");
+			//boardDao.up_hit(bnum); // 가능하지만 추천은 안함. 글내용보기에서는 업데이트 안되고 글목록에서 확인됨
 			request.setAttribute("boardDto", bDto);
 			
 			viewPage="content_view.jsp";
+		} else if (com.equals("/delete.do")) {
+			String bnum = request.getParameter("bnum"); //유저가 삭제를 원하는 글 번호
+			
+			BoardDao boardDao = new BoardDao();
+			boardDao.board_delete(bnum);
+			
+			viewPage="list.do";
+		} else if (com.equals("/modify_form.do")) {
+			String bnum = request.getParameter("bnum"); // 수정할 글의 내용을 보내줌
+			
+			BoardDao boardDao = new BoardDao();
+			BoardDto bDto = boardDao.content_view(bnum,"1");
+			
+			request.setAttribute("boardDto", bDto);
+			
+			viewPage="modify_form.jsp";
+		} else if (com.equals("/modify.do")) {
+			
+			String bnum = request.getParameter("bnum");
+			String btitle = request.getParameter("btitle");
+			String bname = request.getParameter("bname");
+			String bcontent = request.getParameter("bcontent");
+			BoardDao boardDao = new BoardDao(); 
+			boardDao.board_modify(bnum, btitle, bname, bcontent);
+			
+			viewPage = "list.do";  // 주의!! list.jsp는 안됨 . list.do 
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
